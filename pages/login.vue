@@ -46,7 +46,6 @@ export default {
   data () {
     return {
       email: '',
-      name: '',
       password: '',
       showPassword: false,
       required: value => !!value || '必須入力です'

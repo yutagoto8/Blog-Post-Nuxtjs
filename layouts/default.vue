@@ -2,6 +2,7 @@
   <v-app>
     <v-navigation-drawer
       v-model="drawer"
+      color="light-green"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
@@ -63,7 +64,7 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Signup',
+          title: 'Login',
           to: '/login'
         }
       ],
