@@ -33,8 +33,9 @@ export default {
     signup () {
       if (this.email.trim() && this.password.trim() && this.name.trim()) {
         createUserWithEmailAndPassword(auth, this.email, this.password)
-          .then(() => {
+          .then((userCredential) => {
             this.message = 'アカウントが作成されました'
+            userCredential.user.displayName = this.name
           })
           .catch((err) => {
             this.message = err.message
