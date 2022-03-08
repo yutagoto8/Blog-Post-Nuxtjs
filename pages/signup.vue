@@ -16,18 +16,26 @@
 
 <script>
 import { createUserWithEmailAndPassword } from '@firebase/auth'
-import { auth } from '../plugins/firebase'
+import { addDoc, collection, onSnapshot } from '@firebase/firestore'
+import { auth, db } from '../plugins/firebase'
+const userCollectionRef = collection(db, 'users')
 
 export default {
   name: 'SignupPage',
   data () {
     return {
+      users: [],
       email: '',
       password: '',
       confirmPassword: '',
       name: '',
       message: ''
     }
+  },
+  mounted () {
+    onSnapshot(userCollectionRef, (querySnapshot) => {
+      this.users = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    })
   },
   methods: {
     signup () {
@@ -40,6 +48,13 @@ export default {
           .catch((err) => {
             this.message = err.message
           })
+        addDoc(userCollectionRef, {
+          name: this.name,
+          email: this.email
+        }).then(() => {
+          this.name = ''
+          this.email = ''
+        })
       } else {
         this.message = 'パスワードが一致しません!'
       }
