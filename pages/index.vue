@@ -1,22 +1,21 @@
 <template>
   <v-container>
     <h1>Home</h1>
-    <v-container>
-      <v-row>
-        <v-from @submit.prevent="add">
-          <v-col>
-            <v-text-field v-model="title" dense label="Title" />
-          </v-col>
-          <v-col>
-            <v-text-field v-model="contents" dense label="Contents" />
-          </v-col>
-          <v-co>
-            <v-btn type="submit">
-              add
-            </v-btn>
-          </v-co>
-        </v-from>
-      </v-row>
+    <br>
+    <v-container v-if="user">
+      <v-from @submit.prevent="add">
+        <v-col>
+          <v-text-field v-model="title" dense label="Title" />
+        </v-col>
+        <v-col>
+          <v-textarea v-model="contents" dense label="Contents" />
+        </v-col>
+        <v-co>
+          <v-btn type="submit">
+            add
+          </v-btn>
+        </v-co>
+      </v-from>
     </v-container>
     <v-row>
       <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
@@ -44,7 +43,9 @@
 
 <script>
 import { addDoc, collection, onSnapshot } from 'firebase/firestore'
-import { db } from '../plugins/firebase'
+import { onAuthStateChanged } from '@firebase/auth'
+import { db, auth } from '../plugins/firebase'
+
 const userCollectionRef = collection(db, 'blogs')
 
 export default {
@@ -58,6 +59,17 @@ export default {
     }
   },
   mounted () {
+    this.user = auth.currentUser
+    onAuthStateChanged(auth, (user) => {
+      this.user = user
+      if (user) {
+        this.$store.dispatch('setUser', {
+          uid: user.uid,
+          displayName: user.displayName
+        })
+      }
+      this.user = this.$store.state.user
+    })
     onSnapshot(userCollectionRef, (querySnapshot) => {
       this.blogs = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     })
