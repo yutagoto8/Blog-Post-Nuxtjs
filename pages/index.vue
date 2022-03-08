@@ -22,9 +22,9 @@
         <v-card>
           <v-card-title>Title: {{ blog.title }}</v-card-title>
           <v-card-subtitle>Create_User: {{ blog.user }}</v-card-subtitle>
-          <!-- <v-card-text>
-            Create_date: {{ $dateFns.format(blog.timestamp.toDate().getDate(), 'yyyy/MM/dd') }}
-          </v-card-text> -->
+          <v-card-text>
+            Created_at: {{ $dateFns.format(blog.date.toDate().getDate(), 'yyyy/MM/dd') }}
+          </v-card-text>
           <v-card-text>{{ blog.contents }}</v-card-text>
           <!-- 削除処理 -->
           <!-- <v-card-actions>
