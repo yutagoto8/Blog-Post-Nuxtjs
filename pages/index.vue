@@ -95,6 +95,7 @@ export default {
       signOut(auth).then(() => {
         this.$store.dispatch('setUser', null)
       })
+      // this.$router.push('/')
     }
   }
 }

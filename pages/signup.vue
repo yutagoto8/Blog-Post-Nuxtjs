@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import { createUserWithEmailAndPassword } from '@firebase/auth'
-import { addDoc, collection, onSnapshot } from '@firebase/firestore'
+import { createUserWithEmailAndPassword, updateProfile } from '@firebase/auth'
+import { collection, onSnapshot } from '@firebase/firestore'
 import { auth, db } from '../plugins/firebase'
 const userCollectionRef = collection(db, 'users')
 
@@ -24,7 +24,6 @@ export default {
   name: 'SignupPage',
   data () {
     return {
-      users: [],
       email: '',
       password: '',
       confirmPassword: '',
@@ -40,23 +39,27 @@ export default {
   methods: {
     signup () {
       if (this.email.trim() && this.password.trim() && this.name.trim()) {
-        createUserWithEmailAndPassword(auth, this.email, this.password)
-          .then((userCredential) => {
-            this.message = 'アカウントが作成されました'
-            userCredential.user.displayName = this.name
-          })
-          .catch((err) => {
-            this.message = err.message
-          })
-        addDoc(userCollectionRef, {
-          name: this.name,
-          email: this.email
-        }).then(() => {
-          this.name = ''
-          this.email = ''
-        })
-      } else {
-        this.message = 'パスワードが一致しません!'
+        if (this.password === this.confirmPassword) {
+          createUserWithEmailAndPassword(auth, this.email, this.password)
+            .then((userCredential) => {
+              const user = userCredential.user
+              updateProfile(user, { displayName: this.name })
+                .then(() => {
+                  const user = auth.currentUser
+                  this.message = user.displayName + 'さんのアカウントが作成されました。'
+                  this.$store.dispatch('setUser', {
+                    uid: user.uid,
+                    displayName: user.displayName
+                  })
+                  this.$router.push('/')
+                })
+            })
+            .catch((err) => {
+              this.message = err.message
+            })
+        } else {
+          this.message = 'パスワードが一致しません!'
+        }
       }
     }
   }
