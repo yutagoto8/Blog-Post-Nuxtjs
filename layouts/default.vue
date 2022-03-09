@@ -33,6 +33,11 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <div>
+        <v-btn @click="logout">
+          ログアウト
+        </v-btn>
+      </div>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -49,6 +54,9 @@
 </template>
 
 <script>
+import { signOut } from 'firebase/auth'
+import { auth } from '../plugins/firebase'
+
 export default {
   name: 'DefaultLayout',
   data () {
@@ -72,6 +80,13 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'BlogPost'
+    }
+  },
+  methods: {
+    logout () {
+      signOut(auth).then(() => {
+        this.$store.dispatch('setUser', null)
+      })
     }
   }
 }

@@ -3,6 +3,8 @@
     <h1>Home</h1>
     <br>
     <v-container v-if="user">
+      <h3>{{ user.displayName }}さんようこそ</h3>
+      <br>
       <v-form @submit.prevent="add">
         <v-col>
           <v-text-field v-model="title" dense label="Title" />
@@ -16,9 +18,6 @@
           </v-btn>
         </v-co>
       </v-form>
-      <v-btn @click="logout">
-        ログアウト
-      </v-btn>
     </v-container>
     <v-row>
       <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
@@ -46,7 +45,7 @@
 
 <script>
 import { addDoc, collection, onSnapshot, serverTimestamp } from 'firebase/firestore'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 import { db, auth } from '../plugins/firebase'
 
 const userCollectionRef = collection(db, 'blogs')
@@ -90,13 +89,12 @@ export default {
           this.contens = ''
         })
       }
-    },
-    logout () {
-      signOut(auth).then(() => {
-        this.$store.dispatch('setUser', null)
-      })
-      // this.$router.push('/')
     }
+    // logout () {
+    //   signOut(auth).then(() => {
+    //     this.$store.dispatch('setUser', null)
+    //   })
+    // this.$router.push('/')
   }
 }
 </script>
