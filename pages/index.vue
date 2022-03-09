@@ -28,15 +28,14 @@
             Created_at: {{ $dateFns.format(blog.date.toDate(), 'yyyy/MM/dd') }}
           </v-card-text>
           <v-card-text>{{ blog.contents }}</v-card-text>
-          <!-- 削除処理 -->
-          <!-- <v-card-actions>
+          <v-card-actions v-if="user">
             <v-spacer />
-            <v-btn icon @click="remove(user.id)">
+            <v-btn icon @click="remove(blog.id)">
               <v-icon color="blue">
                 mdi-delete
               </v-icon>
             </v-btn>
-          </v-card-actions> -->
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -44,7 +43,7 @@
 </template>
 
 <script>
-import { addDoc, collection, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { db, auth } from '../plugins/firebase'
 
@@ -89,6 +88,10 @@ export default {
           this.contens = ''
         })
       }
+    },
+    remove (id) {
+      const userDocumentRef = doc(db, 'blogs', id)
+      deleteDoc(userDocumentRef)
     }
     // logout () {
     //   signOut(auth).then(() => {

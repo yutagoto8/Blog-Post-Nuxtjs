@@ -33,8 +33,8 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <div>
-        <v-btn @click="logout">
+      <div v-if="user">
+        <v-btn flat to="/login" @click="logout">
           ログアウト
         </v-btn>
       </div>
