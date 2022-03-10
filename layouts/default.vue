@@ -33,8 +33,8 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <div v-if="user">
-        <v-btn flat to="/login" @click="logout">
+      <div>
+        <v-btn v-if="user" flat to="/login" @click="logout">
           ログアウト
         </v-btn>
       </div>
@@ -54,13 +54,15 @@
 </template>
 
 <script>
-import { signOut } from 'firebase/auth'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth } from '../plugins/firebase'
 
 export default {
   name: 'DefaultLayout',
   data () {
     return {
+      blogs: [],
+      user: '',
       clipped: false,
       drawer: false,
       fixed: false,
@@ -81,6 +83,19 @@ export default {
       rightDrawer: false,
       title: 'BlogPost'
     }
+  },
+  mounted () {
+    this.user = auth.currentUser
+    onAuthStateChanged(auth, (user) => {
+      this.user = user
+      if (user) {
+        this.$store.dispatch('setUser', {
+          uid: user.uid,
+          displayName: user.displayName
+        })
+      }
+      this.user = this.$store.state.user
+    })
   },
   methods: {
     logout () {
