@@ -12,11 +12,11 @@
         <v-col>
           <v-textarea v-model="contents" dense label="Contents" />
         </v-col>
-        <v-co>
+        <v-col>
           <v-btn type="submit">
             add
           </v-btn>
-        </v-co>
+        </v-col>
       </v-form>
     </v-container>
     <v-row>
@@ -44,8 +44,8 @@
 
 <script>
 import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp } from 'firebase/firestore'
-import { onAuthStateChanged } from 'firebase/auth'
-import { db, auth } from '../plugins/firebase'
+// import { onAuthStateChanged } from 'firebase/auth'
+import { db } from '../plugins/firebase'
 
 const userCollectionRef = collection(db, 'blogs')
 
@@ -55,22 +55,27 @@ export default {
     return {
       blogs: [],
       title: '',
-      user: '',
+      // user: '',
       contents: ''
     }
   },
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
   mounted () {
-    this.user = auth.currentUser
-    onAuthStateChanged(auth, (user) => {
-      this.user = user
-      if (user) {
-        this.$store.dispatch('setUser', {
-          uid: user.uid,
-          displayName: user.displayName
-        })
-      }
-      this.user = this.$store.state.user
-    })
+    // // this.user = auth.currentUser
+    // onAuthStateChanged(auth, (user) => {
+    //   // this.user = user
+    //   if (user) {
+    //     this.$store.dispatch('setUser', {
+    //       uid: user.uid,
+    //       displayName: user.displayName
+    //     })
+    //   }
+    //   this.user = this.$store.state.user
+    // })
     onSnapshot(userCollectionRef, (querySnapshot) => {
       this.blogs = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     })

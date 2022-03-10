@@ -33,9 +33,14 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <div>
-        <v-btn v-if="user" flat to="/login" @click="logout">
+      <div v-if="user">
+        <v-btn flat to="/login" @click="logout">
           ログアウト
+        </v-btn>
+      </div>
+      <div v-else>
+        <v-btn flat to="/login">
+          ログイン
         </v-btn>
       </div>
     </v-app-bar>
@@ -55,14 +60,16 @@
 
 <script>
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { auth } from '../plugins/firebase'
+import { collection, onSnapshot } from '@firebase/firestore'
+import { auth, db } from '../plugins/firebase'
+
+const userCollectionRef = collection(db, 'blogs')
 
 export default {
   name: 'DefaultLayout',
   data () {
     return {
-      blogs: [],
-      user: '',
+      // user: '',
       clipped: false,
       drawer: false,
       fixed: false,
@@ -84,17 +91,25 @@ export default {
       title: 'BlogPost'
     }
   },
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
   mounted () {
-    this.user = auth.currentUser
+    // this.user = auth.currentUser
     onAuthStateChanged(auth, (user) => {
-      this.user = user
+      // this.user = user
       if (user) {
         this.$store.dispatch('setUser', {
           uid: user.uid,
           displayName: user.displayName
         })
       }
-      this.user = this.$store.state.user
+      // this.user = this.$store.state.user
+    })
+    onSnapshot(userCollectionRef, (querySnapshot) => {
+      this.blogs = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     })
   },
   methods: {
