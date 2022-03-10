@@ -31,8 +31,11 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title class="text-h6 ml-6 ms-3" v-text="title" />
       <v-spacer />
+      <div v-if="user" class="text-ml5 ms-2">
+        {{ user.displayName }}さん&ensp;
+      </div>
       <div v-if="user">
         <v-btn flat to="/login" @click="logout">
           ログアウト
@@ -78,12 +81,12 @@ export default {
           icon: 'mdi-apps',
           title: 'Home',
           to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Login',
-          to: '/login'
         }
+        // {
+        //   icon: 'mdi-chart-bubble',
+        //   title: 'Login',
+        //   to: '/login'
+        // }
       ],
       miniVariant: false,
       right: true,

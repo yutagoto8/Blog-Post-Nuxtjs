@@ -22,7 +22,11 @@
     <v-row>
       <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
         <v-card>
-          <v-card-title>Title: {{ blog.title }}</v-card-title>
+          <v-card-title>
+            <router-link to="/show">
+              {{ blog.title }}
+            </router-link>
+          </v-card-title>
           <v-card-subtitle>Create_User: {{ blog.user }}</v-card-subtitle>
           <v-card-text v-if="blog.date">
             Created_at: {{ $dateFns.format(blog.date.toDate(), 'yyyy/MM/dd') }}
