@@ -24,8 +24,8 @@
       </v-btn>
     </v-form>
     <br>
-    <div v-for="comment in comments" :key="comment.id" cols="12" sm="6" md="4">
-      <v-card>
+    <div cols="12" sm="6" md="4">
+      <v-card v-for="comment in comments" :key="comment.id">
         <v-card-text>
           Comment: {{ comment.content }}
         </v-card-text>
@@ -51,8 +51,9 @@ export default {
     return {
       blog: {},
       blogId: '',
-      comments: [],
-      content: ''
+      comments: {},
+      content: '',
+      addCommentId: ''
     }
   },
   mounted () {
@@ -64,13 +65,19 @@ export default {
     getDoc(docRef).then((doc) => {
       this.blog = doc.data()
     })
+    this.addCommentId = this.$route.query.id
+    const documentRef = doc(db, 'comments', this.addCommentId)
+    getDoc(documentRef).then((doc) => {
+      this.comments = doc.data()
+    })
   },
   methods: {
     add () {
       if (this.content.trim()) {
         addDoc(userCollectionRef, {
           content: this.content,
-          created_at: serverTimestamp()
+          created_at: serverTimestamp(),
+          addCommentId: this.$route.query.id
         }).then(() => {
           this.content = ''
         })
