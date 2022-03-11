@@ -34,7 +34,7 @@
             Created_at: {{ $dateFns.format(blog.date.toDate(), 'yyyy/MM/dd') }}
           </v-card-text>
           <v-card-text>{{ blog.contents }}</v-card-text>
-          <v-card-actions v-if="user">
+          <v-card-actions v-if="user && user.displayName === blog.user">
             <v-spacer />
             <v-btn icon @click="remove(blog.id)">
               <v-icon color="blue">

@@ -1,19 +1,19 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
-        <v-text-title>
-          {{ blog.title }}
-        </v-text-title>
-        <v-text-subtitle>
-          Create_User: {{ blog.user }}
-        </v-text-subtitle>
-        <v-text v-if="blog.date">
-          Created_at: {{ $dateFns.format(blog.date.toDate(), 'yyyy/MM/dd') }}
-        </v-text>
-        <v-text>{{ blog.contents }}</v-text>
+    <div>
+      <v-col cols="12" sm="6" md="4">
+        <v-card-title>
+          {{ id }}
+        </v-card-title>
+        <v-card-subtitle>
+          <!-- Create_User: {{ blogs.id.user }} -->
+        </v-card-subtitle>
+        <!-- <v-card-text v-if="blogs.id.date">
+          Created_at: {{ $dateFns.format(blog.id.date.toDate(), 'yyyy/MM/dd') }}
+        </v-card-text> -->
+        <!-- <v-card-text>{{ blogs.id.contents }}</v-card-text> -->
       </v-col>
-    </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -27,7 +27,8 @@ export default {
   name: 'ShowPage',
   data () {
     return {
-      blogs: []
+      blogs: [],
+      id: this.$route.query.id
     }
   },
   mounted () {
