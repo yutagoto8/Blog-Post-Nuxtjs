@@ -24,7 +24,9 @@
         <v-card>
           <v-card-title>
             <router-link to="/show">
-              {{ blog.title }}
+              <router-link :to="{name:'show', query:{id: blog.id}}">
+                {{ blog.title }}
+              </router-link>
             </router-link>
           </v-card-title>
           <v-card-subtitle>Create_User: {{ blog.user }}</v-card-subtitle>
