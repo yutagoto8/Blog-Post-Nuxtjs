@@ -24,16 +24,28 @@
       </v-btn>
     </v-form>
     <br>
-    <div cols="12" sm="6" md="4">
-      <v-card v-for="comment in comments" :key="comment.id">
-        <v-card-text>
-          Comment: {{ comment.content }}
-        </v-card-text>
-        <v-card-text v-if="comment.created_at">
-          Created_at: {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
-        </v-card-text>
-      </v-card>
-    </div>
+    <v-simple-table>
+      <thead>
+        <tr>
+          <th class="text-left">
+            Created_at
+          </th>
+          <th class="text-left">
+            Comment
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="comment in comments" :key="comment.id">
+          <td v-if="comment.created_at">
+            {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
+          </td>
+          <td>
+            {{ comment.content }}
+          </td>
+        </tr>
+      </tbody>
+    </v-simple-table>
   </v-container>
 </template>
 
