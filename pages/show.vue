@@ -63,7 +63,6 @@ export default {
     return {
       blog: {},
       blogId: '',
-      comments: {},
       content: '',
       addCommentId: ''
     }
