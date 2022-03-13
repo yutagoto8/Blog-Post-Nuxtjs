@@ -30,7 +30,7 @@
       items-per-page="5"
       class="elevation-1"
     >
-      <template slot="{comments}">
+      <template slot="comments">
         <tbody>
           <tr v-for="comment in comments" :key="comment.id">
             <td v-if="comment.created_at">
@@ -59,7 +59,7 @@
           <td v-if="comment.created_at">
             {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
           </td>
-          <td>
+          <td v-if="comment.created_at">
             {{ comment.content }}
           </td>
         </tr>
@@ -83,7 +83,13 @@ export default {
       blog: {},
       blogId: '',
       content: '',
-      addCommentId: ''
+      addCommentId: '',
+      currentSort: 'created_at',
+      currentSortDir: 'asc'
+      // heders: [
+      //   { text: 'Created_at', align: 'center', value: 'created_at' },
+      //   { text: 'Comment', align: 'center', value: 'content' }
+      // ]
     }
   },
   // computed: {
@@ -95,9 +101,19 @@ export default {
   //   }
   // },
   computed: {
-    sortedByCreatedAt () {
+    sortedCreated () {
       return this.created_at.slice().sort((a, b) => {
-        return a.created_at - b.created_at
+        let modifier = 1
+        if (this.currentSortDir === 'desc') {
+          modifier = -1
+        }
+        if (a[this.currentSort] < b[this.currentSort]) {
+          return -1 * modifier
+        }
+        if (a[this.currentSort] > b[this.currentSort]) {
+          return 1 * modifier
+        }
+        return 0
       })
     }
   },
@@ -127,6 +143,13 @@ export default {
           this.content = ''
         })
       }
+    },
+    sort (s) {
+    // if s == current sort, reverse
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc'
+      }
+      this.currentSort = s
     }
   }
 }
