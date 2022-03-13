@@ -24,6 +24,25 @@
       </v-btn>
     </v-form>
     <br>
+    <!-- <v-data-table
+      :heders="heders"
+      :items="comments"
+      items-per-page="5"
+      class="elevation-1"
+    >
+      <template slot="{comments}">
+        <tbody>
+          <tr v-for="comment in comments" :key="comment.id">
+            <td v-if="comment.created_at">
+              {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
+            </td>
+            <td>
+              {{ comment.content }}
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-data-table> -->
     <v-simple-table>
       <thead>
         <tr>
@@ -65,6 +84,21 @@ export default {
       blogId: '',
       content: '',
       addCommentId: ''
+    }
+  },
+  // computed: {
+  //   heders () {
+  //     return [
+  //       { text: 'Created_at', align: 'center', value: 'created_at' },
+  //       { text: 'Comment', align: 'center', value: 'content' }
+  //     ]
+  //   }
+  // },
+  computed: {
+    sortedByCreatedAt () {
+      return this.created_at.slice().sort((a, b) => {
+        return a.created_at - b.created_at
+      })
     }
   },
   mounted () {
