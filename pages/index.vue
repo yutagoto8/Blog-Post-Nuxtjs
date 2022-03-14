@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore'
 // import { onAuthStateChanged } from 'firebase/auth'
 import { db } from '../plugins/firebase'
 
@@ -82,7 +82,8 @@ export default {
     //   }
     //   this.user = this.$store.state.user
     // })
-    onSnapshot(userCollectionRef, (querySnapshot) => {
+    const q = query(userCollectionRef, orderBy('date', 'desc'))
+    onSnapshot(q, (querySnapshot) => {
       this.blogs = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     })
   },

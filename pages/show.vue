@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore'
 import { db } from '../plugins/firebase'
 
 // const userCollectionRef = collection(db, 'blogs')
@@ -134,7 +134,9 @@ export default {
   //   }
   // },
   mounted () {
-    onSnapshot(userCollectionRef, (querySnapshot) => {
+    const q = query(userCollectionRef, orderBy('created_at', 'desc'))
+
+    onSnapshot(q, (querySnapshot) => {
       this.comments = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     })
     this.blogId = this.$route.query.id
@@ -142,11 +144,11 @@ export default {
     getDoc(docRef).then((doc) => {
       this.blog = doc.data()
     })
-    this.addCommentId = this.$route.query.id
-    const documentRef = doc(db, 'comments', this.addCommentId)
-    getDoc(query(documentRef), where('addCommentId', '==', this.$route.query.id), orderBy('created_at', 'desc')).then((doc) => {
-      this.comments = doc.data()
-    })
+    // this.addCommentId = this.$route.query.id
+    // const documentRef = doc(db, 'comments', this.addCommentId)
+    // getDoc(query(documentRef), where('addCommentId', '==', this.$route.query.id), orderBy('created_at', 'desc')).then((doc) => {
+    //   this.comments = doc.data()
+    // })
   },
   methods: {
     add () {
