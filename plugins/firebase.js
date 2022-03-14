@@ -7,12 +7,12 @@ import { getFirestore } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCsEG9fUFP2QKgngn8TxVA0Wbp_NQWKGEU',
-  authDomain: 'blogpost-fd8df.firebaseapp.com',
-  projectId: 'blogpost-fd8df',
-  storageBucket: 'blogpost-fd8df.appspot.com',
-  messagingSenderId: '550533024961',
-  appId: '1:550533024961:web:a5c816661709e9b6da5840'
+  apiKey: process.env.VUE_APP_FB_API_KEY,
+  authDomain: process.env.VUE_APP_FB_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_FB_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FB_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FB_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FB_APP_ID
 }
 
 // Initialize Firebase

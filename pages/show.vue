@@ -98,7 +98,8 @@ export default {
     return {
       blog: {},
       blogId: '',
-      content: ''
+      content: '',
+      comments: []
       // currentSort: 'created_at',
       // currentSortDir: 'asc'
       // comments: [
