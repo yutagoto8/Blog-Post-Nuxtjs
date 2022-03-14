@@ -61,7 +61,7 @@
         </tr>
       </thead>
       <tbody aria-sort="descending">
-        <tr v-for="comment in comments" :key="comment.id">
+        <tr v-for="comment in comments" :key="comment.addCommentId">
           <td v-if="comment.created_at">
             {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
           </td>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
 import { db } from '../plugins/firebase'
 
 // const userCollectionRef = collection(db, 'blogs')
@@ -95,8 +95,7 @@ export default {
     return {
       blog: {},
       blogId: '',
-      content: '',
-      addCommentId: ''
+      content: ''
       // currentSort: 'created_at',
       // currentSortDir: 'asc'
       // comments: [
@@ -134,7 +133,7 @@ export default {
   //   }
   // },
   mounted () {
-    const q = query(userCollectionRef, orderBy('created_at', 'desc'))
+    const q = query(userCollectionRef, where('addCommentId', '==', this.$route.query.id), orderBy('created_at', 'desc'))
 
     onSnapshot(q, (querySnapshot) => {
       this.comments = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
