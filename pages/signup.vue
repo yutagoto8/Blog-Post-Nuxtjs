@@ -8,6 +8,9 @@
     <v-btn @click="signup">
       Sign up
     </v-btn>
+    <v-btn @click="home">
+      Home
+    </v-btn>
     <div>
       {{ message }}
     </div>
@@ -61,6 +64,9 @@ export default {
           this.message = 'パスワードが一致しません!'
         }
       }
+    },
+    home () {
+      this.$router.push('/')
     }
   }
 }

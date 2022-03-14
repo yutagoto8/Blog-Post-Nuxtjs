@@ -29,6 +29,7 @@
       </div>
       <br>
       <div>
+        <v-icon>mdi-account-edit</v-icon>
         <nuxt-link to="/signup">
           Create Account
         </nuxt-link>

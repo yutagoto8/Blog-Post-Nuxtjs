@@ -17,15 +17,16 @@
       </v-card>
     </div>
     <br>
-    <v-form @submit.prevent="add">
+    <v-btn @click="home()">
+      HOME
+    </v-btn>
+    <br><br>
+    <v-form v-if="user" @submit.prevent="add">
       <v-col>
         <v-textarea v-model="content" dense label="Comment" />
       </v-col>
       <v-btn type="submit">
         ADD
-      </v-btn>
-      <v-btn @click="home()">
-        HOME
       </v-btn>
     </v-form>
     <br>
@@ -57,7 +58,7 @@
           <th class="text-left">
             Comment
           </th>
-          <th class="text-left">
+          <th v-if="user" class="text-left">
             Remove
           </th>
         </tr>
@@ -71,7 +72,7 @@
             {{ comment.content }}
           </td>
           <td v-if="comment.created_at">
-            <v-btn icon @click="remove(comment.id)">
+            <v-btn v-if="user" icon @click="remove(comment.id)">
               <v-icon color="blue">
                 mdi-delete
               </v-icon>
@@ -134,6 +135,11 @@ export default {
   //     })
   //   }
   // },
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
   mounted () {
     const q = query(userCollectionRef, where('addCommentId', '==', this.$route.query.id), orderBy('created_at', 'desc'))
     onSnapshot(q, (querySnapshot) => {
