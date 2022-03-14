@@ -38,12 +38,12 @@
       </div>
       <div v-if="user">
         <v-btn flat to="/login" @click="logout">
-          ログアウト
+          LOGOUT
         </v-btn>
       </div>
       <div v-else>
         <v-btn flat to="/login">
-          ログイン
+          LOGIN
         </v-btn>
       </div>
     </v-app-bar>

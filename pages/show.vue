@@ -22,6 +22,9 @@
       <v-btn type="submit">
         ADD
       </v-btn>
+      <v-btn @click="home()">
+        HOME
+      </v-btn>
     </v-form>
     <br>
     <!-- <v-data-table
@@ -57,7 +60,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody aria-sort="descending">
         <tr v-for="comment in comments" :key="comment.id">
           <td v-if="comment.created_at">
             {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
@@ -65,7 +68,7 @@
           <td v-if="comment.created_at">
             {{ comment.content }}
           </td>
-          <td>
+          <td v-if="comment.created_at">
             <v-btn icon @click="remove(comment.id)">
               <v-icon color="blue">
                 mdi-delete
@@ -79,7 +82,7 @@
 </template>
 
 <script>
-import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
 import { db } from '../plugins/firebase'
 
 // const userCollectionRef = collection(db, 'blogs')
@@ -93,9 +96,9 @@ export default {
       blog: {},
       blogId: '',
       content: '',
-      addCommentId: '',
-      currentSort: 'created_at',
-      currentSortDir: 'asc'
+      addCommentId: ''
+      // currentSort: 'created_at',
+      // currentSortDir: 'asc'
       // comments: [
       //   { id: this.id, created_at: this.created_at, comment: this.content }
       // ]
@@ -113,23 +116,23 @@ export default {
   //     ]
   //   }
   // },
-  computed: {
-    sortedCreated () {
-      return this.created_at.slice().sort((a, b) => {
-        let modifier = 1
-        if (this.currentSortDir === 'desc') {
-          modifier = -1
-        }
-        if (a[this.currentSort] < b[this.currentSort]) {
-          return -1 * modifier
-        }
-        if (a[this.currentSort] > b[this.currentSort]) {
-          return 1 * modifier
-        }
-        return 0
-      })
-    }
-  },
+  // computed: {
+  //   sortedCreated () {
+  //     return this.created_at.slice().sort((a, b) => {
+  //       let modifier = 1
+  //       if (this.currentSortDir === 'desc') {
+  //         modifier = -1
+  //       }
+  //       if (a[this.currentSort] < b[this.currentSort]) {
+  //         return -1 * modifier
+  //       }
+  //       if (a[this.currentSort] > b[this.currentSort]) {
+  //         return 1 * modifier
+  //       }
+  //       return 0
+  //     })
+  //   }
+  // },
   mounted () {
     onSnapshot(userCollectionRef, (querySnapshot) => {
       this.comments = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
@@ -141,7 +144,7 @@ export default {
     })
     this.addCommentId = this.$route.query.id
     const documentRef = doc(db, 'comments', this.addCommentId)
-    getDoc(documentRef).then((doc) => {
+    getDoc(query(documentRef), where('addCommentId', '==', this.$route.query.id), orderBy('created_at', 'desc')).then((doc) => {
       this.comments = doc.data()
     })
   },
@@ -157,16 +160,12 @@ export default {
         })
       }
     },
-    sort (s) {
-    // if s == current sort, reverse
-      if (s === this.currentSort) {
-        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc'
-      }
-      this.currentSort = s
-    },
     remove (id) {
       const userDocumentRef = doc(db, 'comments', id)
       deleteDoc(userDocumentRef)
+    },
+    home () {
+      this.$router.push('/')
     }
   }
 }
