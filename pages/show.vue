@@ -6,9 +6,11 @@
           {{ blog.title }}
         </v-card-title>
         <v-card-text>
+          <v-icon>mdi-account</v-icon>
           Create_User: {{ blog.user }}
         </v-card-text>
         <v-card-text v-if="blog.date">
+          <v-icon>mdi-alarm</v-icon>
           Created_at: {{ $dateFns.format(blog.date.toDate(), 'yyyy/MM/dd') }}
         </v-card-text>
         <v-card-text>{{ blog.contents }}</v-card-text>
@@ -61,7 +63,7 @@
         </tr>
       </thead>
       <tbody aria-sort="descending">
-        <tr v-for="comment in comments" :key="comment.addCommentId">
+        <tr v-for="comment in comments" :key="comment.id">
           <td v-if="comment.created_at">
             {{ $dateFns.format(comment.created_at.toDate(), 'yyyy/MM/dd') }}
           </td>
@@ -134,7 +136,6 @@ export default {
   // },
   mounted () {
     const q = query(userCollectionRef, where('addCommentId', '==', this.$route.query.id), orderBy('created_at', 'desc'))
-
     onSnapshot(q, (querySnapshot) => {
       this.comments = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     })

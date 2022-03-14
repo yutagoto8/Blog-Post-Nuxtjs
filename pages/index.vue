@@ -29,8 +29,12 @@
               </router-link>
             </router-link>
           </v-card-title>
-          <v-card-subtitle>Create_User: {{ blog.user }}</v-card-subtitle>
+          <v-card-subtitle>
+            <v-icon>mdi-account</v-icon>
+            Create_User: {{ blog.user }}
+          </v-card-subtitle>
           <v-card-text v-if="blog.date">
+            <v-icon>mdi-alarm</v-icon>
             Created_at: {{ $dateFns.format(blog.date.toDate(), 'yyyy/MM/dd') }}
           </v-card-text>
           <v-card-text>{{ blog.contents }}</v-card-text>
