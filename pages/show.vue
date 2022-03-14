@@ -52,6 +52,9 @@
           <th class="text-left">
             Comment
           </th>
+          <th class="text-left">
+            Remove
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -62,6 +65,13 @@
           <td v-if="comment.created_at">
             {{ comment.content }}
           </td>
+          <td>
+            <v-btn icon @click="remove(comment.id)">
+              <v-icon color="blue">
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -69,7 +79,7 @@
 </template>
 
 <script>
-import { addDoc, collection, doc, getDoc, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, serverTimestamp } from 'firebase/firestore'
 import { db } from '../plugins/firebase'
 
 // const userCollectionRef = collection(db, 'blogs')
@@ -86,6 +96,9 @@ export default {
       addCommentId: '',
       currentSort: 'created_at',
       currentSortDir: 'asc'
+      // comments: [
+      //   { id: this.id, created_at: this.created_at, comment: this.content }
+      // ]
       // heders: [
       //   { text: 'Created_at', align: 'center', value: 'created_at' },
       //   { text: 'Comment', align: 'center', value: 'content' }
@@ -150,6 +163,10 @@ export default {
         this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc'
       }
       this.currentSort = s
+    },
+    remove (id) {
+      const userDocumentRef = doc(db, 'comments', id)
+      deleteDoc(userDocumentRef)
     }
   }
 }
